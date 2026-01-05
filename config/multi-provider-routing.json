@@ -1,0 +1,276 @@
+{
+  "providers": {
+    "claude": {
+      "name": "Anthropic Claude",
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "model": "claude-opus-4-5",
+      "enabled": true,
+      "priority": 1,
+      "strengths": [
+        "reasoning",
+        "analysis",
+        "writing",
+        "planning",
+        "testing",
+        "validation",
+        "balanced tasks"
+      ],
+      "room_path": "~/.my-claude-agents/room-claude",
+      "fallback_provider": null
+    },
+    "openai": {
+      "name": "OpenAI GPT-4 + Codex",
+      "api_key_env": "OPENAI_API_KEY",
+      "model": "gpt-4-turbo",
+      "enabled": false,
+      "priority": 2,
+      "strengths": [
+        "code generation",
+        "algorithm design",
+        "implementation",
+        "optimization",
+        "debugging"
+      ],
+      "room_path": "~/.my-claude-agents/room-openai",
+      "fallback_provider": "claude",
+      "note": "Enable by setting OPENAI_API_KEY environment variable"
+    },
+    "gemini": {
+      "name": "Google Gemini Pro Vision",
+      "api_key_env": "GOOGLE_API_KEY",
+      "model": "gemini-pro-vision",
+      "enabled": false,
+      "priority": 3,
+      "strengths": [
+        "multimodal analysis",
+        "image processing",
+        "design validation",
+        "visual content",
+        "layout optimization"
+      ],
+      "room_path": "~/.my-claude-agents/room-gemini",
+      "fallback_provider": "claude",
+      "note": "Enable by setting GOOGLE_API_KEY environment variable"
+    },
+    "grok": {
+      "name": "xAI Grok-1",
+      "api_key_env": "XAI_API_KEY",
+      "model": "grok-1",
+      "enabled": false,
+      "priority": 4,
+      "strengths": [
+        "real-time data",
+        "current events",
+        "live information",
+        "time-sensitive analysis",
+        "trending topics"
+      ],
+      "room_path": "~/.my-claude-agents/room-grok",
+      "fallback_provider": "claude",
+      "note": "Enable by setting XAI_API_KEY environment variable"
+    }
+  },
+  "routing_rules": {
+    "keyword_to_provider": {
+      "code": {
+        "primary": "openai",
+        "fallback": "claude",
+        "confidence": 0.95
+      },
+      "build": {
+        "primary": "openai",
+        "fallback": "claude",
+        "confidence": 0.90
+      },
+      "implement": {
+        "primary": "openai",
+        "fallback": "claude",
+        "confidence": 0.90
+      },
+      "image": {
+        "primary": "gemini",
+        "fallback": "claude",
+        "confidence": 0.95
+      },
+      "design": {
+        "primary": "gemini",
+        "fallback": "claude",
+        "confidence": 0.80
+      },
+      "visual": {
+        "primary": "gemini",
+        "fallback": "claude",
+        "confidence": 0.85
+      },
+      "real-time": {
+        "primary": "grok",
+        "fallback": "claude",
+        "confidence": 0.95
+      },
+      "news": {
+        "primary": "grok",
+        "fallback": "claude",
+        "confidence": 0.85
+      },
+      "current": {
+        "primary": "grok",
+        "fallback": "claude",
+        "confidence": 0.80
+      },
+      "latest": {
+        "primary": "grok",
+        "fallback": "claude",
+        "confidence": 0.80
+      },
+      "live": {
+        "primary": "grok",
+        "fallback": "claude",
+        "confidence": 0.75
+      },
+      "test": {
+        "primary": "claude",
+        "fallback": null,
+        "confidence": 0.99
+      },
+      "validate": {
+        "primary": "claude",
+        "fallback": null,
+        "confidence": 0.99
+      },
+      "verify": {
+        "primary": "claude",
+        "fallback": null,
+        "confidence": 0.99
+      },
+      "reason": {
+        "primary": "claude",
+        "fallback": null,
+        "confidence": 0.85
+      },
+      "analyze": {
+        "primary": "claude",
+        "fallback": null,
+        "confidence": 0.80
+      },
+      "explain": {
+        "primary": "claude",
+        "fallback": null,
+        "confidence": 0.80
+      },
+      "plan": {
+        "primary": "claude",
+        "fallback": null,
+        "confidence": 0.80
+      },
+      "write": {
+        "primary": "claude",
+        "fallback": null,
+        "confidence": 0.75
+      }
+    },
+    "task_type_mapping": {
+      "code_generation": {
+        "preferred": "openai",
+        "secondary": "claude"
+      },
+      "testing": {
+        "preferred": "claude",
+        "secondary": null
+      },
+      "multimodal": {
+        "preferred": "gemini",
+        "secondary": "claude"
+      },
+      "real_time": {
+        "preferred": "grok",
+        "secondary": "claude"
+      },
+      "reasoning": {
+        "preferred": "claude",
+        "secondary": null
+      },
+      "optimization": {
+        "preferred": "openai",
+        "secondary": "claude"
+      }
+    }
+  },
+  "execution_rules": {
+    "parallel_execution": {
+      "enabled": true,
+      "max_parallel_rooms": 4,
+      "default": 2
+    },
+    "context_isolation": {
+      "enabled": true,
+      "auto_compact_threshold": 0.7,
+      "isolation_type": "context_window"
+    },
+    "fallback_strategy": "automatic",
+    "provider_health_check": {
+      "enabled": true,
+      "interval_seconds": 300,
+      "timeout_seconds": 5
+    },
+    "cost_optimization": {
+      "enabled": true,
+      "strategy": "use_specialized_only_when_needed"
+    }
+  },
+  "examples": {
+    "single_task_parallel": {
+      "description": "React dashboard build + validation",
+      "user_input": "Build a React dashboard and make sure it works",
+      "detected_keywords": ["build", "React", "validate", "works"],
+      "routing": {
+        "room_1": {
+          "provider": "openai",
+          "task": "va-react-specialist builds dashboard components",
+          "reason": "'build React' keyword matched with 95% confidence"
+        },
+        "room_2": {
+          "provider": "claude",
+          "task": "tdd-validation-agent tests the output",
+          "reason": "Testing is Claude's strength (99% confidence)"
+        },
+        "aggregation": "va-knowledge-synthesizer merges both outputs"
+      },
+      "expected_time": "40% faster than sequential",
+      "cost": "Optimized - uses each provider's strength"
+    },
+    "multi_task_distribution": {
+      "description": "Content Command Center with real-time features",
+      "user_input": "Create Content Command Center with publishing pipeline and real-time stats",
+      "routing": {
+        "room_1": {
+          "provider": "gemini",
+          "task": "Validate UI design mockups",
+          "reason": "Multimodal analysis (95% confidence)"
+        },
+        "room_2": {
+          "provider": "openai",
+          "task": "Build Kanban pipeline logic",
+          "reason": "Complex code generation (90% confidence)"
+        },
+        "room_3": {
+          "provider": "claude",
+          "task": "Design publishing engine architecture",
+          "reason": "Planning and reasoning (85% confidence)"
+        },
+        "room_4": {
+          "provider": "grok",
+          "task": "Implement real-time statistics feeds",
+          "reason": "Real-time data handling (95% confidence)"
+        },
+        "room_5": {
+          "provider": "claude",
+          "task": "Run integration tests",
+          "reason": "Testing (99% confidence)"
+        }
+      },
+      "aggregation": "va-knowledge-synthesizer combines all 5 outputs into cohesive deliverable",
+      "expected_time": "All rooms work in parallel - 10s vs 50s sequential",
+      "cost": "Higher (5 providers), but 5x faster delivery"
+    }
+  }
+}

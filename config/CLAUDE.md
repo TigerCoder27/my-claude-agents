@@ -108,6 +108,137 @@ Main Thread:
 - True parallel execution at scale
 - Single merge point = quality gate
 
+## Multi-Provider Hybrid System
+
+### Purpose
+Enable parallel execution across multiple AI providers (Claude, OpenAI, Gemini, Grok) with intelligent provider selection and isolated execution contexts.
+
+### Supported Providers
+| Provider | API Key Env | Best For | Model |
+|----------|-------------|----------|-------|
+| Claude | ANTHROPIC_API_KEY | Reasoning, writing, balanced | Claude 3.x |
+| OpenAI | OPENAI_API_KEY | Code generation, logic | GPT-4, Codex |
+| Gemini | GOOGLE_API_KEY | Images, multimodal, analysis | Gemini Pro Vision |
+| Grok | XAI_API_KEY | Real-time data, current events | Grok-1 |
+
+### Provider Rooms Structure
+Each provider operates in isolated context:
+```
+~/.my-claude-agents/
+├─ room-claude/          (default, all agents available)
+│  ├ agents/
+│  ├ config/
+│  └ work/
+│
+├─ room-openai/          (specialized: code generation)
+│  ├ agents/
+│  ├ config/
+│  └ work/
+│
+├─ room-gemini/          (specialized: multimodal)
+│  ├ agents/
+│  ├ config/
+│  └ work/
+│
+└─ room-grok/            (specialized: real-time data)
+   ├ agents/
+   ├ config/
+   └ work/
+```
+
+### Intelligent Provider Routing
+
+**Task Keyword → Provider Priority:**
+```
+KEYWORD MAPPING:
+"code", "build", "implement" → OpenAI (Codex) > Claude
+"image", "design", "visual", "draw" → Gemini (multimodal) > Claude
+"real-time", "news", "current", "live", "latest" → Grok > Claude
+"reason", "analyze", "explain", "plan", "write" → Claude (default)
+"test", "validate", "verify", "quality" → Claude (TDD specialists)
+```
+
+**Confidence-Based Provider Selection:**
+- **100% match (single keyword):** Use specific provider
+- **Multiple matches:** Use highest-performing provider for task type
+- **No match:** Default to Claude
+- **Provider unavailable:** Fallback to next in priority list
+
+### Multi-Provider Execution Pattern
+
+**Single Task with Provider Hints:**
+```
+User: "Build a React dashboard and validate it works"
+Router analyzes:
+- "Build React" (code) → OpenAI Codex
+- "Validate" (test) → Claude (TDD)
+Route type: PARALLEL
+Execute:
+  └─ Room-OpenAI: va-react-specialist builds components
+  └─ Room-Claude: tdd-validation-agent tests output
+  └─ Final: va-knowledge-synthesizer merges results
+Result: Faster code + guaranteed quality
+```
+
+**Complex Multi-Task with Provider Distribution:**
+```
+User: "Create Content Command Center with publishing and real-time stats"
+Router breaks into subtasks:
+1. Dashboard UI → Room-Gemini (design validation)
+2. Kanban pipeline → Room-OpenAI (complex logic)
+3. Publishing engine → Room-Claude (reasoning)
+4. Real-time stats → Room-Grok (live data)
+5. Integration tests → Room-Claude (TDD)
+Execute: All 5 rooms in parallel
+Merge: va-knowledge-synthesizer combines outputs
+Result: 40% faster than sequential, specialized expert per task
+```
+
+### Room Configuration Template
+Each room needs `.claude/settings.json`:
+```json
+{
+  "provider": "openai",
+  "api_key_env": "OPENAI_API_KEY",
+  "model": "gpt-4-turbo",
+  "enhanced_routing": {
+    "enabled": true,
+    "mode": "hybrid",
+    "confidence_threshold": 0.6
+  },
+  "multi_agent_protocol": {
+    "enabled": true,
+    "isolation": "context",
+    "auto_compact_threshold": 0.7,
+    "file_output_dir": "work"
+  }
+}
+```
+
+### Provider Fallback & Failover
+
+**If primary provider fails:**
+```
+Task requires: OpenAI (code generation)
+Request fails → Fallback to Claude (capable but slower)
+Status: Return result with note "OpenAI unavailable, used Claude fallback"
+
+Task prioritizes: Speed → Grok (real-time)
+Grok unavailable → Skip, use Claude's reasoning instead
+Status: Return result with caveat "Real-time data unavailable"
+```
+
+### Cost Optimization
+```
+Simple tasks (classification, routing) → Claude (cheapest)
+Complex reasoning → Claude (best quality-per-cost)
+Code generation → OpenAI Codex (fastest output)
+Multimodal → Gemini (only multimodal capable)
+Real-time → Grok (only real-time capable)
+
+RESULT: Use specialized provider ONLY when needed
+```
+
 ## Agent Sources
 
 | Prefix | Repository | Specialty |

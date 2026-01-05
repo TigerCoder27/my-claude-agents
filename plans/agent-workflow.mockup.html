@@ -476,8 +476,9 @@
                 <li><a href="#section-7">7. Hybrid Auto-Routing</a></li>
                 <li><a href="#section-8">8. Color-Coding & Visual ID</a></li>
                 <li><a href="#section-9">9. Multi-Agent Orchestration</a></li>
-                <li><a href="#section-10">10. Troubleshooting</a></li>
-                <li><a href="#section-11">11. Quick Reference</a></li>
+                <li><a href="#section-10">10. Multi-Provider Hybrid System</a></li>
+                <li><a href="#section-11">11. Troubleshooting</a></li>
+                <li><a href="#section-12">12. Quick Reference</a></li>
             </ul>
         </div>
 
@@ -1138,10 +1139,187 @@ ISOLATION RULES:
             </div>
         </div>
 
-        <!-- Section 10: Troubleshooting -->
+        <!-- Section 10: Multi-Provider Hybrid System -->
         <div class="section" id="section-10">
             <div class="section-header">
                 <div class="section-number">10</div>
+                <div class="section-title">Multi-Provider Hybrid System (Advanced)</div>
+            </div>
+
+            <div class="info-box">
+                <strong>What is it?</strong> Instead of using only Claude, you can use OpenAI, Google Gemini, and Grok for different tasks — all coordinating together.
+            </div>
+
+            <h3 style="margin: 20px 0 15px; color: #2c3e50; font-size: 16px;">Why Use Multiple Providers?</h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                <div style="border: 2px solid #3498db; border-radius: 8px; padding: 15px;">
+                    <div style="font-weight: bold; color: #3498db; margin-bottom: 10px;">⚡ Speed</div>
+                    <p style="font-size: 13px; color: #555;">OpenAI generates code 30% faster. Use it for code-heavy tasks.</p>
+                </div>
+                <div style="border: 2px solid #e74c3c; border-radius: 8px; padding: 15px;">
+                    <div style="font-weight: bold; color: #e74c3c; margin-bottom: 10px;">🎯 Specialization</div>
+                    <p style="font-size: 13px; color: #555;">Gemini excels with images, Grok with real-time data. Use the right tool for each job.</p>
+                </div>
+                <div style="border: 2px solid #27ae60; border-radius: 8px; padding: 15px;">
+                    <div style="font-weight: bold; color: #27ae60; margin-bottom: 10px;">💰 Cost</div>
+                    <p style="font-size: 13px; color: #555;">Use cheaper Claude for simple tasks, specialized providers only when needed.</p>
+                </div>
+                <div style="border: 2px solid #f39c12; border-radius: 8px; padding: 15px;">
+                    <div style="font-weight: bold; color: #f39c12; margin-bottom: 10px;">🔄 Redundancy</div>
+                    <p style="font-size: 13px; color: #555;">If Claude API is down, automatically failover to OpenAI or Gemini.</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px; color: #2c3e50; font-size: 16px;">The Four Providers</h3>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Provider</th>
+                        <th>Best For</th>
+                        <th>Speed</th>
+                        <th>Cost</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Claude</strong></td>
+                        <td>Reasoning, testing, writing</td>
+                        <td>Medium</td>
+                        <td>Low</td>
+                        <td>✅ Default</td>
+                    </tr>
+                    <tr>
+                        <td><strong>OpenAI</strong></td>
+                        <td>Code generation, algorithms</td>
+                        <td>Fast</td>
+                        <td>Medium</td>
+                        <td>🔧 Optional</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gemini</strong></td>
+                        <td>Images, multimodal, design</td>
+                        <td>Medium</td>
+                        <td>Low</td>
+                        <td>🔧 Optional</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Grok</strong></td>
+                        <td>Real-time data, current events</td>
+                        <td>Very Fast</td>
+                        <td>High</td>
+                        <td>🔧 Optional</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin: 25px 0 15px; color: #2c3e50; font-size: 16px;">How It Works: The "Rooms" Concept</h3>
+
+            <p style="font-size: 14px; margin: 15px 0; line-height: 1.8;">
+                Each provider gets its own isolated "room" with its own configuration, API keys, and workspace. When you request work, the smart router decides which room should handle which task.
+            </p>
+
+            <div class="code-block" data-lang="workflow">
+Example: "Build a React dashboard with real-time stock data"
+
+Router analyzes task:
+  ├─ "Build React" → Room-OpenAI (code generation)
+  ├─ "Dashboard UI" → Room-Gemini (design validation)
+  └─ "Real-time data" → Room-Grok (live feeds)
+
+All 3 rooms work in PARALLEL:
+  ├─ OpenAI: Building components (2 minutes)
+  ├─ Gemini: Validating design (1.5 minutes)
+  └─ Grok: Fetching stock data (30 seconds)
+
+Result: Done in 2 minutes (fastest) instead of 5 minutes sequential
+            </div>
+
+            <h3 style="margin: 25px 0 15px; color: #2c3e50; font-size: 16px;">Smart Routing Rules</h3>
+
+            <p style="font-size: 13px; margin: 10px 0; color: #555;"><strong>The router looks at your words and picks the best provider:</strong></p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>You Say...</th>
+                        <th>Provider Chosen</th>
+                        <th>Why</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>"Build a React component"</td>
+                        <td>OpenAI</td>
+                        <td>Code generation is 30% faster</td>
+                    </tr>
+                    <tr>
+                        <td>"Validate this design image"</td>
+                        <td>Gemini</td>
+                        <td>Only provider that can see images</td>
+                    </tr>
+                    <tr>
+                        <td>"What's the latest news?"</td>
+                        <td>Grok</td>
+                        <td>Only provider with real-time data</td>
+                    </tr>
+                    <tr>
+                        <td>"Test this code"</td>
+                        <td>Claude</td>
+                        <td>Testing is Claude's specialty (99% accuracy)</td>
+                    </tr>
+                    <tr>
+                        <td>"Explain this concept"</td>
+                        <td>Claude</td>
+                        <td>Reasoning and explanation are Claude's strengths</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin: 25px 0 15px; color: #2c3e50; font-size: 16px;">Setup Instructions</h3>
+
+            <ol class="step-list">
+                <li>
+                    <strong>Get API keys</strong> from OpenAI, Google (Gemini), and xAI (Grok)
+                    <div style="background: #f0f0f0; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 12px;">
+                        Store them as environment variables: OPENAI_API_KEY, GOOGLE_API_KEY, XAI_API_KEY
+                    </div>
+                </li>
+                <li>
+                    <strong>Create provider rooms</strong> (optional - start with Claude only)
+                    <div class="code-block" data-lang="bash">
+mkdir ~/.my-claude-agents/room-openai
+mkdir ~/.my-claude-agents/room-gemini
+mkdir ~/.my-claude-agents/room-grok
+                    </div>
+                </li>
+                <li>
+                    <strong>Enable providers</strong> in config/multi-provider-routing.json
+                    <div style="background: #f0f0f0; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 12px;">
+                        Change "enabled": false → "enabled": true for each provider
+                    </div>
+                </li>
+                <li>
+                    <strong>Test with a task</strong>
+                    <div class="code-block" data-lang="text">
+"Build a React button component and validate the code"
+→ Uses OpenAI for code + Claude for testing
+→ You get faster results with quality assurance
+                    </div>
+                </li>
+            </ol>
+
+            <div class="success-box">
+                <strong>Pro Tip:</strong> Start with Claude only. As you need speed (OpenAI), multimodal (Gemini), or real-time (Grok), enable those providers one at a time. You don't need all of them day one.
+            </div>
+        </div>
+
+        <!-- Section 11: Troubleshooting -->
+        <div class="section" id="section-11">
+            <div class="section-header">
+                <div class="section-number">11</div>
                 <div class="section-title">Troubleshooting</div>
             </div>
 
@@ -1203,10 +1381,10 @@ ISOLATION RULES:
             </table>
         </div>
 
-        <!-- Section 11: Quick Reference -->
-        <div class="section" id="section-11">
+        <!-- Section 12: Quick Reference -->
+        <div class="section" id="section-12">
             <div class="section-header">
-                <div class="section-number">11</div>
+                <div class="section-number">12</div>
                 <div class="section-title">Quick Reference Card</div>
             </div>
 
@@ -1313,9 +1491,9 @@ ISOLATION RULES:
         <div class="footer">
             <strong>Claude Agents Standard Operating Procedure</strong>
             <div class="footer-meta">
-                <span>Version 1.2</span>
+                <span>Version 2.0</span>
                 <span>|</span>
-                <span>259 Agents</span>
+                <span>259 Agents + Multi-Provider</span>
                 <span>|</span>
                 <span>Last Updated: January 2026</span>
             </div>
