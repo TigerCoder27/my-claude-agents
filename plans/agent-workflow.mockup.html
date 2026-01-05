@@ -475,8 +475,9 @@
                 <li><a href="#section-6">6. Using Agents in Practice</a></li>
                 <li><a href="#section-7">7. Hybrid Auto-Routing</a></li>
                 <li><a href="#section-8">8. Color-Coding & Visual ID</a></li>
-                <li><a href="#section-9">9. Troubleshooting</a></li>
-                <li><a href="#section-10">10. Quick Reference</a></li>
+                <li><a href="#section-9">9. Multi-Agent Orchestration</a></li>
+                <li><a href="#section-10">10. Troubleshooting</a></li>
+                <li><a href="#section-11">11. Quick Reference</a></li>
             </ul>
         </div>
 
@@ -1041,10 +1042,106 @@ Use @tdd-validation-agent to test my API endpoints
             </div>
         </div>
 
-        <!-- Section 9: Troubleshooting -->
+        <!-- Section 9: Multi-Agent Orchestration -->
         <div class="section" id="section-9">
             <div class="section-header">
                 <div class="section-number">9</div>
+                <div class="section-title">Multi-Agent Orchestration (Advanced)</div>
+            </div>
+
+            <div class="info-box">
+                <strong>Problem Solved:</strong> When running multiple agents in parallel, context windows can bloat and cause compaction loops. This protocol keeps each agent isolated with file-based outputs.
+            </div>
+
+            <h3 style="margin: 20px 0 15px; color: #2c3e50; font-size: 16px;">Key Orchestration Agents</h3>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Agent</th>
+                        <th>Role</th>
+                        <th>When to Use</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>tdd-task-orchestrator</code></td>
+                        <td>Primary Orchestrator</td>
+                        <td>Parallel task execution with dependency management</td>
+                    </tr>
+                    <tr>
+                        <td><code>ws-tdd-orchestrator</code></td>
+                        <td>TDD Workflow</td>
+                        <td>Multi-agent coordination with TDD enforcement</td>
+                    </tr>
+                    <tr>
+                        <td><code>va-knowledge-synthesizer</code></td>
+                        <td>Aggregator</td>
+                        <td>Merge outputs from multiple agents into one</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin: 25px 0 15px; color: #2c3e50; font-size: 16px;">Branch Isolation Pattern</h3>
+
+            <div class="code-block" data-lang="workflow">
+Main Thread:
+  └─→ tdd-task-orchestrator analyzes tasks
+        ├─→ Agent-1 (background) → work/agent-1-output.md
+        ├─→ Agent-2 (background) → work/agent-2-output.md
+        └─→ Agent-3 (background) → work/agent-3-output.md
+
+  └─→ Poll for completion (check file existence)
+
+  └─→ va-knowledge-synthesizer merges outputs
+        └─→ work/final-output.md
+            </div>
+
+            <h3 style="margin: 25px 0 15px; color: #2c3e50; font-size: 16px;">Isolation Rules</h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0;">
+                <div class="success-box" style="margin: 0;">
+                    <strong>DO:</strong>
+                    <ul style="margin: 10px 0 0 20px; font-size: 13px;">
+                        <li>Run agents in background mode</li>
+                        <li>Write output to work/*.md files</li>
+                        <li>Auto-compact at 70% context</li>
+                        <li>Return 1-line status only</li>
+                        <li>Signal completion via flag file</li>
+                    </ul>
+                </div>
+                <div class="warning-box" style="margin: 0;">
+                    <strong>DON'T:</strong>
+                    <ul style="margin: 10px 0 0 20px; font-size: 13px;">
+                        <li>Return verbose results to main</li>
+                        <li>Share context between agents</li>
+                        <li>Wait for agent output in main</li>
+                        <li>Run 6+ agents in parallel</li>
+                        <li>Skip the aggregation phase</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin: 25px 0 15px; color: #2c3e50; font-size: 16px;">Agent Directive Template</h3>
+
+            <div class="code-block" data-lang="prompt">
+ISOLATION RULES:
+- Work autonomously in isolated context
+- Auto-compact when context > 70% full
+- Write output to: work/agent-{name}-output.md
+- Return only 1-line status to main thread
+- Signal done: create work/agent-{name}-complete.flag
+            </div>
+
+            <div class="success-box">
+                <strong>Benefits:</strong> Each agent gets full context window | Auto-compaction per agent | Main thread never bloats | True parallel execution | Single merge = quality gate
+            </div>
+        </div>
+
+        <!-- Section 10: Troubleshooting -->
+        <div class="section" id="section-10">
+            <div class="section-header">
+                <div class="section-number">10</div>
                 <div class="section-title">Troubleshooting</div>
             </div>
 
@@ -1106,10 +1203,10 @@ Use @tdd-validation-agent to test my API endpoints
             </table>
         </div>
 
-        <!-- Section 10: Quick Reference -->
-        <div class="section" id="section-10">
+        <!-- Section 11: Quick Reference -->
+        <div class="section" id="section-11">
             <div class="section-header">
-                <div class="section-number">10</div>
+                <div class="section-number">11</div>
                 <div class="section-title">Quick Reference Card</div>
             </div>
 
@@ -1216,7 +1313,7 @@ Use @tdd-validation-agent to test my API endpoints
         <div class="footer">
             <strong>Claude Agents Standard Operating Procedure</strong>
             <div class="footer-meta">
-                <span>Version 1.1</span>
+                <span>Version 1.2</span>
                 <span>|</span>
                 <span>259 Agents</span>
                 <span>|</span>
