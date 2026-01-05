@@ -1,0 +1,41 @@
+{
+  "name": "my-claude-agents",
+  "version": "2.0.0",
+  "description": "Multi-provider AI agent orchestration system with 259 specialized agents",
+  "main": "dist/cli/multi-agent.js",
+  "bin": {
+    "multi-agent": "./dist/cli/multi-agent.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/cli/multi-agent.ts",
+    "dev": "ts-node-dev --respawn src/cli/multi-agent.ts",
+    "test:router": "ts-node src/router/multi-provider-router.ts",
+    "test:synthesizer": "ts-node src/aggregator/knowledge-synthesizer.ts",
+    "doppler:run": "doppler run -- ts-node src/cli/multi-agent.ts",
+    "doppler:test": "doppler run -- npm run test:router",
+    "cleanup": "ts-node src/cli/multi-agent.ts --cleanup"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "multi-provider",
+    "claude",
+    "openai",
+    "gemini",
+    "grok",
+    "orchestration"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

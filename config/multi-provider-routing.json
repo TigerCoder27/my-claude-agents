@@ -22,7 +22,7 @@
       "name": "OpenAI GPT-4 + Codex",
       "api_key_env": "OPENAI_API_KEY",
       "model": "gpt-4-turbo",
-      "enabled": false,
+      "enabled": true,
       "priority": 2,
       "strengths": [
         "code generation",
@@ -39,7 +39,7 @@
       "name": "Google Gemini Pro Vision",
       "api_key_env": "GOOGLE_API_KEY",
       "model": "gemini-pro-vision",
-      "enabled": false,
+      "enabled": true,
       "priority": 3,
       "strengths": [
         "multimodal analysis",
@@ -56,7 +56,7 @@
       "name": "xAI Grok-1",
       "api_key_env": "XAI_API_KEY",
       "model": "grok-1",
-      "enabled": false,
+      "enabled": true,
       "priority": 4,
       "strengths": [
         "real-time data",
