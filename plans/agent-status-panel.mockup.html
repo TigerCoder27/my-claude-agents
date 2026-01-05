@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nimbalyst Agent Status Panel - Design Mockup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .mockup-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .mockup-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #3c3c3c;
+        }
+
+        .mockup-header h1 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .mockup-header p {
+            color: #858585;
+            font-size: 14px;
+        }
+
+        /* Editor Layout */
+        .editor-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr 320px;
+            gap: 1px;
+            background: #3c3c3c;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 700px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #252526;
+            padding: 0;
+        }
+
+        .sidebar-header {
+            padding: 12px 15px;
+            background: #1e1e1e;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #858585;
+            border-bottom: 1px solid #3c3c3c;
+        }
+
+        .file-tree {
+            padding: 10px 0;
+        }
+
+        .file-item {
+            padding: 6px 15px 6px 25px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-item:hover {
+            background: #2a2d2e;
+        }
+
+        .file-item.active {
+            background: #37373d;
+        }
+
+        .file-icon {
+            font-size: 14px;
+        }
+
+        /* Main Editor */
+        .main-editor {
+            background: #1e1e1e;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-tabs {
+            display: flex;
+            background: #252526;
+            border-bottom: 1px solid #3c3c3c;
+        }
+
+        .editor-tab {
+            padding: 10px 20px;
+            font-size: 13px;
+            background: #2d2d2d;
+            border-right: 1px solid #3c3c3c;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .editor-tab.active {
+            background: #1e1e1e;
+            border-bottom: 2px solid #007acc;
+        }
+
+        .editor-content {
+            flex: 1;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            overflow: auto;
+        }
+
+        .code-line {
+            display: flex;
+        }
+
+        .line-number {
+            color: #858585;
+            width: 40px;
+            text-align: right;
+            padding-right: 15px;
+            user-select: none;
+        }
+
+        .code-content {
+            flex: 1;
+        }
+
+        .comment { color: #6a9955; }
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .function { color: #dcdcaa; }
+
+        /* Agent Status Panel - THE MAIN FEATURE */
+        .agent-panel {
+            background: #252526;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #3c3c3c;
+        }
+
+        .panel-header {
+            padding: 12px 15px;
+            background: #1e1e1e;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #3c3c3c;
+        }
+
+        .panel-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #858585;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-badge {
+            background: #007acc;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 10px;
+        }
+
+        .panel-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .panel-action {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            cursor: pointer;
+            color: #858585;
+            font-size: 12px;
+        }
+
+        .panel-action:hover {
+            background: #3c3c3c;
+            color: #fff;
+        }
+
+        /* Active Agents Section */
+        .panel-section {
+            border-bottom: 1px solid #3c3c3c;
+        }
+
+        .section-header {
+            padding: 10px 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #cccccc;
+            background: #2d2d2d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-badge {
+            background: #3c3c3c;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            color: #858585;
+        }
+
+        .section-content {
+            padding: 10px 0;
+        }
+
+        /* Agent Cards */
+        .agent-card {
+            padding: 12px 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .agent-card:hover {
+            background: #2a2d2e;
+        }
+
+        .agent-card.red {
+            border-left-color: #e74c3c;
+        }
+
+        .agent-card.orange {
+            border-left-color: #f39c12;
+        }
+
+        .agent-card.green {
+            border-left-color: #27ae60;
+        }
+
+        .agent-indicator {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .agent-indicator.red {
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        .agent-indicator.orange {
+            background: rgba(243, 156, 18, 0.2);
+        }
+
+        .agent-indicator.green {
+            background: rgba(39, 174, 96, 0.2);
+        }
+
+        .agent-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .agent-name {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .agent-name.red { color: #e74c3c; }
+        .agent-name.orange { color: #f39c12; }
+        .agent-name.green { color: #27ae60; }
+
+        .agent-task {
+            font-size: 11px;
+            color: #858585;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .agent-progress {
+            margin-top: 6px;
+            height: 3px;
+            background: #3c3c3c;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .agent-progress-bar {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .agent-progress-bar.red { background: #e74c3c; }
+        .agent-progress-bar.orange { background: #f39c12; }
+        .agent-progress-bar.green { background: #27ae60; }
+
+        .agent-status-icon {
+            font-size: 14px;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+        }
+
+        .status-badge.waiting {
+            background: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+        }
+
+        .status-badge.done {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        /* Queue Section */
+        .queue-item {
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: #858585;
+        }
+
+        .queue-item:hover {
+            background: #2a2d2e;
+        }
+
+        .queue-number {
+            width: 20px;
+            height: 20px;
+            background: #3c3c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #858585;
+        }
+
+        /* Legend */
+        .legend {
+            padding: 15px;
+            background: #1e1e1e;
+            margin-top: auto;
+        }
+
+        .legend-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #858585;
+            margin-bottom: 10px;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.red { background: #e74c3c; }
+        .legend-dot.orange { background: #f39c12; }
+        .legend-dot.green { background: #27ae60; }
+
+        /* Floating Mini Panel Option */
+        .mini-panel-demo {
+            margin-top: 30px;
+            padding: 20px;
+            background: #252526;
+            border-radius: 8px;
+        }
+
+        .mini-panel-title {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .floating-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1e1e1e;
+            padding: 8px 12px;
+            border-radius: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .floating-indicator .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .floating-indicator .dot.red { background: #e74c3c; }
+        .floating-indicator .dot.orange { background: #f39c12; }
+        .floating-indicator .dot.green { background: #27ae60; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Status Bar Option */
+        .status-bar-demo {
+            margin-top: 20px;
+            background: #007acc;
+            padding: 4px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
+        .status-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .status-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Annotations */
+        .annotation {
+            position: absolute;
+            background: #007acc;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .annotation::after {
+            content: '';
+            position: absolute;
+            border: 6px solid transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="mockup-container">
+        <div class="mockup-header">
+            <h1>🎨 Nimbalyst Agent Status Panel</h1>
+            <p>Design mockup for real-time agent visualization in the editor</p>
+        </div>
+
+        <!-- Main Editor Layout -->
+        <div class="editor-layout">
+            <!-- File Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">Explorer</div>
+                <div class="file-tree">
+                    <div class="file-item">
+                        <span class="file-icon">📁</span>
+                        <span>my-claude-agents</span>
+                    </div>
+                    <div class="file-item" style="padding-left: 35px;">
+                        <span class="file-icon">📁</span>
+                        <span>agents</span>
+                    </div>
+                    <div class="file-item active" style="padding-left: 45px;">
+                        <span class="file-icon">📄</span>
+                        <span>App.tsx</span>
+                    </div>
+                    <div class="file-item" style="padding-left: 45px;">
+                        <span class="file-icon">📄</span>
+                        <span>api.ts</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Editor -->
+            <div class="main-editor">
+                <div class="editor-tabs">
+                    <div class="editor-tab active">
+                        <span>📄</span>
+                        <span>App.tsx</span>
+                    </div>
+                </div>
+                <div class="editor-content">
+                    <div class="code-line">
+                        <span class="line-number">1</span>
+                        <span class="code-content"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">2</span>
+                        <span class="code-content"><span class="keyword">import</span> { Dashboard } <span class="keyword">from</span> <span class="string">'./Dashboard'</span>;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">3</span>
+                        <span class="code-content"></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">4</span>
+                        <span class="code-content"><span class="comment">// Building dashboard component...</span></span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">5</span>
+                        <span class="code-content"><span class="keyword">export const</span> <span class="function">App</span> = () => {</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">6</span>
+                        <span class="code-content">  <span class="keyword">return</span> (</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">7</span>
+                        <span class="code-content">    &lt;<span class="keyword">div</span> className=<span class="string">"app"</span>&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">8</span>
+                        <span class="code-content">      &lt;<span class="function">Dashboard</span> /&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">9</span>
+                        <span class="code-content">    &lt;/<span class="keyword">div</span>&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">10</span>
+                        <span class="code-content">  );</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">11</span>
+                        <span class="code-content">};</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Status Panel (THE MAIN FEATURE) -->
+            <div class="agent-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        🤖 Agent Activity
+                        <span class="panel-badge">3</span>
+                    </div>
+                    <div class="panel-actions">
+                        <div class="panel-action" title="Refresh">⟳</div>
+                        <div class="panel-action" title="Settings">⚙</div>
+                    </div>
+                </div>
+
+                <!-- Active Agents -->
+                <div class="panel-section">
+                    <div class="section-header">
+                        Active Now
+                        <span class="section-badge">2</span>
+                    </div>
+                    <div class="section-content">
+                        <!-- GREEN Agent - Active -->
+                        <div class="agent-card green">
+                            <div class="agent-indicator green">🟢</div>
+                            <div class="agent-info">
+                                <div class="agent-name green">
+                                    va-react-specialist
+                                    <span class="status-badge active">Active</span>
+                                </div>
+                                <div class="agent-task">Building Dashboard component...</div>
+                                <div class="agent-progress">
+                                    <div class="agent-progress-bar green" style="width: 65%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RED Agent - Active -->
+                        <div class="agent-card red">
+                            <div class="agent-indicator red">🔴</div>
+                            <div class="agent-info">
+                                <div class="agent-name red">
+                                    tdd-validation-agent
+                                    <span class="status-badge waiting">Waiting</span>
+                                </div>
+                                <div class="agent-task">Queued: Run tests after build</div>
+                                <div class="agent-progress">
+                                    <div class="agent-progress-bar red" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completed -->
+                <div class="panel-section">
+                    <div class="section-header">
+                        Recently Completed
+                        <span class="section-badge">1</span>
+                    </div>
+                    <div class="section-content">
+                        <!-- ORANGE Agent - Done -->
+                        <div class="agent-card orange">
+                            <div class="agent-indicator orange">🟠</div>
+                            <div class="agent-info">
+                                <div class="agent-name orange">
+                                    ws-task-orchestrator
+                                    <span class="status-badge done">Done</span>
+                                </div>
+                                <div class="agent-task">✓ Coordinated build sequence</div>
+                                <div class="agent-progress">
+                                    <div class="agent-progress-bar orange" style="width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Queue -->
+                <div class="panel-section">
+                    <div class="section-header">
+                        Up Next
+                        <span class="section-badge">2</span>
+                    </div>
+                    <div class="section-content">
+                        <div class="queue-item">
+                            <span class="queue-number">1</span>
+                            <span>🔴</span>
+                            <span>tdd-validation-agent → Run unit tests</span>
+                        </div>
+                        <div class="queue-item">
+                            <span class="queue-number">2</span>
+                            <span>🟠</span>
+                            <span>ws-deployment-agent → Deploy preview</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="legend">
+                    <div class="legend-title">Agent Types</div>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <div class="legend-dot red"></div>
+                            <span>Testers</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot orange"></div>
+                            <span>Coordinators</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot green"></div>
+                            <span>Specialists</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alternative: Mini Floating Indicators -->
+        <div class="mini-panel-demo">
+            <div class="mini-panel-title">Alternative: Floating Status Indicators</div>
+            <p style="color: #858585; font-size: 12px; margin-bottom: 15px;">
+                Compact indicators that float at the bottom of the editor
+            </p>
+            <div>
+                <div class="floating-indicator">
+                    <div class="dot green"></div>
+                    <span style="color: #27ae60;">va-react-specialist</span>
+                    <span style="color: #858585;">Building...</span>
+                </div>
+                <div class="floating-indicator">
+                    <div class="dot red"></div>
+                    <span style="color: #e74c3c;">tdd-validation-agent</span>
+                    <span style="color: #858585;">Waiting</span>
+                </div>
+                <div class="floating-indicator">
+                    <div class="dot orange"></div>
+                    <span style="color: #f39c12;">ws-orchestrator</span>
+                    <span style="color: #858585;">✓ Done</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alternative: Status Bar -->
+        <div class="mini-panel-demo">
+            <div class="mini-panel-title">Alternative: Status Bar Integration</div>
+            <p style="color: #858585; font-size: 12px; margin-bottom: 15px;">
+                Agent info in the bottom status bar
+            </p>
+            <div class="status-bar-demo">
+                <div class="status-bar-left">
+                    <div class="status-bar-item">
+                        <span>🤖</span>
+                        <span>3 agents</span>
+                    </div>
+                    <div class="status-bar-item">
+                        <span>🟢</span>
+                        <span>va-react-specialist (65%)</span>
+                    </div>
+                    <div class="status-bar-item">
+                        <span>🔴</span>
+                        <span>tdd-validation (queued)</span>
+                    </div>
+                </div>
+                <div>
+                    <span>⏱️ 2:34</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+{
+  "version": "1.0",
+  "description": "Color configuration for Claude Agent visual identification",
+
+  "agent_types": {
+    "RED": {
+      "name": "Testers",
+      "prefix": "tdd-",
+      "color_hex": "#e74c3c",
+      "color_rgb": "231, 76, 60",
+      "ansi_code": "\u001b[31m",
+      "ansi_bright": "\u001b[91m",
+      "emoji": "🔴",
+      "icon": "🧪",
+      "bg_color": "#fadbd8",
+      "border_color": "#e74c3c",
+      "description": "Quality assurance, testing, validation"
+    },
+    "ORANGE": {
+      "name": "Coordinators",
+      "prefix": "ws-",
+      "color_hex": "#f39c12",
+      "color_rgb": "243, 156, 18",
+      "ansi_code": "\u001b[33m",
+      "ansi_bright": "\u001b[93m",
+      "emoji": "🟠",
+      "icon": "🎯",
+      "bg_color": "#fef5e7",
+      "border_color": "#f39c12",
+      "description": "Orchestration, workflows, coordination"
+    },
+    "GREEN": {
+      "name": "Specialists",
+      "prefix": "va-",
+      "color_hex": "#27ae60",
+      "color_rgb": "39, 174, 96",
+      "ansi_code": "\u001b[32m",
+      "ansi_bright": "\u001b[92m",
+      "emoji": "🟢",
+      "icon": "⚡",
+      "bg_color": "#d5f4e6",
+      "border_color": "#27ae60",
+      "description": "Domain expertise, language specialists"
+    }
+  },
+
+  "status_colors": {
+    "idle": {
+      "color_hex": "#95a5a6",
+      "ansi_code": "\u001b[90m",
+      "emoji": "⚪"
+    },
+    "active": {
+      "color_hex": "#3498db",
+      "ansi_code": "\u001b[34m",
+      "emoji": "🔵"
+    },
+    "success": {
+      "color_hex": "#27ae60",
+      "ansi_code": "\u001b[32m",
+      "emoji": "✅"
+    },
+    "error": {
+      "color_hex": "#e74c3c",
+      "ansi_code": "\u001b[31m",
+      "emoji": "❌"
+    },
+    "waiting": {
+      "color_hex": "#f39c12",
+      "ansi_code": "\u001b[33m",
+      "emoji": "⏳"
+    }
+  },
+
+  "ansi_reset": "\u001b[0m",
+  "ansi_bold": "\u001b[1m",
+  "ansi_dim": "\u001b[2m",
+
+  "prefix_to_type": {
+    "tdd-": "RED",
+    "ws-": "ORANGE",
+    "va-": "GREEN"
+  },
+
+  "sample_agents": {
+    "RED": [
+      "tdd-validation-agent",
+      "tdd-testing-implementation-agent",
+      "tdd-quality-agent",
+      "tdd-task-checker"
+    ],
+    "ORANGE": [
+      "ws-task-orchestrator",
+      "ws-workflow-coordinator",
+      "ws-deployment-orchestrator",
+      "ws-context-manager"
+    ],
+    "GREEN": [
+      "va-react-specialist",
+      "va-python-expert",
+      "va-kubernetes-architect",
+      "va-typescript-pro"
+    ]
+  }
+}
